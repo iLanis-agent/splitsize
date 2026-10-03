@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SplitSize - how many visitors does your A/B test need?</title>
+<meta name="description" content="Sample size and run time for an A/B test, plus a significance check for a finished one.">
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; background:#1c1712; color:#f3ede6; line-height:1.6; }
+  .wrap { max-width:680px; margin:0 auto; padding:48px 20px 60px; }
+  .logo { font-size:46px; font-weight:800; } .logo span { color:#f2a65a; }
+  .tag { font-size:19px; margin-top:10px; color:#ded5ca; }
+  .cta { display:inline-block; margin-top:26px; background:#f2a65a; color:#1c1712; font-weight:700; padding:14px 30px; border-radius:12px; text-decoration:none; }
+  h2 { font-size:21px; margin:40px 0 10px; } li { color:#b9aea1; margin-bottom:8px; } ul { margin-left:20px; }
+  .demo { margin-top:26px; background:#2a2118; border-radius:14px; padding:18px; } .demo b { color:#f2a65a; }
+  footer { margin-top:50px; font-size:13px; color:#8c8174; } a { color:#f2a65a; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo">Split<span>Size</span></div>
+  <div class="tag">Stopping an A/B test when it looks good is how teams ship noise.</div>
+  <a class="cta" href="app.html">Open the app</a>
+  <div class="demo">Moving a 10% conversion rate to 12% needs <b>3,839 visitors per variant</b>: about 8 days at 1,000 visitors a day.</div>
+  <h2>What it does</h2>
+  <ul><li>Visitors per variant for your baseline, lift, significance and power</li><li>Days to run from your daily traffic</li><li>A significance check for a finished test: lift, z and p-value</li><li>Plain notes on peeking and what a p-value does not say</li></ul>
+  <footer>Standard two-proportion z-test, normal approximation. Other calculators can differ. Static, client-side, nothing stored. <a href="https://github.com/iLanis-agent/splitsize">Source</a></footer>
+</div>
+</body>
+</html>
