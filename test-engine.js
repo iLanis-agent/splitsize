@@ -1,0 +1,24 @@
+var S = require('./engine.js'), fails = 0, n = 0;
+function eq(a, b, m, t) { n++; t = t || 1e-9; if (!(Math.abs(a - b) <= t) && a !== b) { fails++; console.log('FAIL', m, a, b); } }
+eq(S.inv(0.975), 1.959964, 'z .975', 1e-5); eq(S.inv(0.5), 0, 'z .5', 1e-9); eq(S.inv(0.8), 0.841621, 'z .8', 1e-5); eq(S.inv(0.995), 2.575829, 'z .995', 1e-5); eq(S.inv(0.025), -1.959964, 'z .025', 1e-5);
+eq(S.cdf(0), 0.5, 'cdf0', 1e-7); eq(S.cdf(1.96), 0.975, 'cdf1.96', 1e-5); eq(S.cdf(-1.96), 0.025, 'cdf-1.96', 1e-5); eq(S.cdf(3), 0.99865, 'cdf3', 1e-5);
+var r = S.sampleSize(10, 2, 'abs', 5, 80, 2, 1000);
+eq(r.perVariant, 3841, 'cited 3841', 5); eq(r.perVariant, 3839, 'exact 3839'); eq(r.total, 7678, 'total'); eq(r.days, 8, 'days'); eq(r.p2, 12, 'p2');
+r = S.sampleSize(10, 20, 'rel', 5, 80); eq(r.p2, 12, 'rel p2'); eq(r.perVariant, 3839, 'rel same');
+r = S.sampleSize(10, 1, 'abs', 5, 80); eq(r.perVariant > 3839 * 3.5, true ? 1 : 0, 'smaller mde needs more'); 
+var a = S.sampleSize(10, 2, 'abs', 5, 80).perVariant, b = S.sampleSize(10, 1, 'abs', 5, 80).perVariant; eq(b / a > 3.7 && b / a < 4.3 ? 1 : 0, 1, 'quarter rule');
+eq(S.sampleSize(10, 2, 'abs', 5, 90).perVariant > a ? 1 : 0, 1, 'power up');
+eq(S.sampleSize(10, 2, 'abs', 1, 80).perVariant > a ? 1 : 0, 1, 'alpha down');
+r = S.sampleSize(10, 2, 'abs', 5, 80, 3, 1500); eq(r.total, 3 * 3839, 'three variants'); eq(r.days, Math.ceil(3 * 3839 / 1500), 'days 3');
+eq(S.sampleSize(10, 2, 'abs', 5, 80).days, null, 'no daily');
+eq(S.sampleSize(0, 2, 'abs', 5, 80), null, 'p0'); eq(S.sampleSize(100, 2, 'abs', 5, 80), null, 'p100'); eq(S.sampleSize(10, 0, 'abs', 5, 80), null, 'mde0');
+eq(S.sampleSize(99, 5, 'abs', 5, 80), null, 'p2>1'); eq(S.sampleSize(10, 2, 'abs', 5, 40), null, 'power low'); eq(S.sampleSize(10, 2, 'abs', 5, 80, 1), null, 'variants 1');
+eq(S.sampleSize(10, -50, 'rel', 5, 80), null, 'neg mde');
+var s = S.significance(100, 1000, 130, 1000); eq(s.z, 2.1027, 'z', 1e-3); eq(s.p, 0.0355, 'p', 1e-3); eq(s.lift, 30, 'lift', 1e-9);
+s = S.significance(100, 1000, 100, 1000); eq(s.p, 1, 'same p', 1e-6); eq(s.z, 0, 'same z');
+s = S.significance(100, 1000, 110, 1000); eq(s.p > 0.05 ? 1 : 0, 1, 'ns');
+s = S.significance(130, 1000, 100, 1000); eq(s.z < 0 ? 1 : 0, 1, 'neg z'); eq(s.p, 0.0355, 'sym p', 1e-3);
+s = S.significance(0, 100, 0, 100); eq(s.p, 1, 'zero conv'); eq(s.lift, null, 'lift null');
+s = S.significance(200, 2000, 260, 2000); eq(s.p < 0.01 ? 1 : 0, 1, 'bigger n significant');
+eq(S.significance(5, 4, 1, 10), null, 'c>n'); eq(S.significance(1, 0, 1, 10), null, 'n0'); eq(S.significance(1.5, 10, 1, 10), null, 'frac');
+console.log(n - fails + '/' + n + ' pass'); process.exit(fails ? 1 : 0);
